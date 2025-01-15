@@ -1,17 +1,23 @@
-# To-Do List:
+# To-Do List
 
-### Complete:
+## ✅ Completed
 - ~~Display file size~~
 
-## Visual feedback
+## 🎨 Visual Feedback
+### High Priority
+- Different icons for different file types (e.g., `.tsx`, `.json`, `.css`)
+
+### Low Priority
 - Hover effects on files/folders
 - Transition animations for folder expand/collapse
-- Different icons for different file types (e.g., .tsx, .json, .css)
 
-## Additional features
+## 🚀 Additional Features
+### High Priority
+- "Expand All"/"Collapse All" buttons
+
+### Medium Priority
 - Search/filter functionality
 - Select and copy specific file paths
-- "Expand All"/"Collapse All" buttons
 - Show last commit info for each file
 
 
