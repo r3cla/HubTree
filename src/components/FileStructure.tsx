@@ -23,7 +23,8 @@ import {
   Package,
   FileArchive,
   Database,
-  Lock
+  Lock,
+  Copyright
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
@@ -67,6 +68,7 @@ const getFileIcon = (filename: string): { icon: IconComponent; color: string } =
     ts: { icon: FileCode, color: 'text-blue-400' },
     jsx: { icon: FileCode, color: 'text-yellow-400' },
     js: { icon: FileCode, color: 'text-yellow-400' },
+    mjs: { icon: FileCode, color: 'text-yellow-300' },
     py: { icon: FileCode, color: 'text-green-400' },
     rb: { icon: FileCode, color: 'text-red-400' },
     php: { icon: FileCode, color: 'text-purple-400' },
@@ -140,7 +142,9 @@ const getFileIcon = (filename: string): { icon: IconComponent; color: string } =
     'package-lock.json': { icon: Lock, color: 'text-yellow-300' },
     'yarn.lock': { icon: Lock, color: 'text-blue-300' },
     '.gitignore': { icon: FileText, color: 'text-gray-400' },
+    '.hintrc': { icon: FileType, color: 'text-gray-400' },
     '.env': { icon: Lock, color: 'text-yellow-300' },
+    'LICENSE': { icon: Copyright, color: 'text-yellow' },
   };
 
   // Check special filenames first
