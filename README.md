@@ -4,15 +4,15 @@
 - ~~Display file size~~
 
 ## Visual feedback
--Hover effects on files/folders
--Transition animations for folder expand/collapse
--Different icons for different file types (e.g., .tsx, .json, .css)
+- Hover effects on files/folders
+- Transition animations for folder expand/collapse
+- Different icons for different file types (e.g., .tsx, .json, .css)
 
 ## Additional features
--Search/filter functionality
--Select and copy specific file paths
--"Expand All"/"Collapse All" buttons
--Show last commit info for each file
+- Search/filter functionality
+- Select and copy specific file paths
+- "Expand All"/"Collapse All" buttons
+- Show last commit info for each file
 
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
