@@ -26,6 +26,7 @@ VS Code, ESLint, PostCSS, Node.js types, TypeScript types
 - Search/filter function
 - Select and copy specific file paths
 - Show last commit info for each file on hover
+- Export to Mindmap diagram
 - Display file sizes (complete ✔️)
 
 
