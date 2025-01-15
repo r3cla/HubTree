@@ -58,6 +58,10 @@ interface FileNode {
 
 type IconComponent = typeof File;
 
+type StringIndexed<T> = {
+  [K in keyof T]: T[K];
+} & { [key: string]: { icon: IconComponent; color: string } };
+
 const getFileIcon = (filename: string): { icon: IconComponent; color: string } => {
   const extension = filename.split('.').pop()?.toLowerCase() || '';
 
@@ -158,11 +162,11 @@ const getFileIcon = (filename: string): { icon: IconComponent; color: string } =
     ...configExtensions,
   };
 
-  // Define the type of allExtensions
-  type AllExtensions = typeof allExtensions;
+  // Define the type of allExtensions ensuring string keys
+  type AllExtensions = StringIndexed<typeof allExtensions>;
 
   // Type guard to check if extension is a key of allExtensions
-  function isValidExtension(extension: string): extension is keyof AllExtensions {
+  function isValidExtension(extension: string): extension is string {
     return extension in allExtensions;
   }
 
