@@ -1,42 +1,31 @@
-# To-Do List
 
-## ✅ Completed
-- ~~Display file size~~
+## The App
+GitHub File Structure Visualizer (HubTree) is a simple web app that lets you explore repository file structures by entering a GitHub repo URL.
 
-## 🎨 Visual Feedback
-### High Priority
-- Different icons for different file types (e.g., `.tsx`, `.json`, `.css`)
+## Features
+- **Interactive File Tree:** Expandable directory structure with color-coded icons for different file types (.tsx, .json, .css, etc.)
+- **One-Click Download:** Download the entire repository as a ZIP file directly from the interface
+- **Structure Copy:** Copy the entire file structure to clipboard in plaintext with one click
 
-### Low Priority
-- Hover effects on files/folders
-- Transition animations for folder expand/collapse
+## Use Cases
+- **Quick Project Evaluation**: Instantly assess open-source projects and libraries without cloning
+- **Technical Interviews**: Get rapid project architecture overviews for discussions
+- **AI Tool Integration**: Share exact file structures with AI agents and tools for more accurate project context
+## Tech Stack
 
-## 🚀 Additional Features
-### High Priority
-- "Expand All"/"Collapse All" buttons
+### Frontend
+React 19.0.0, Next.js 15.1.4, TypeScript 5.7.3, Tailwind CSS 3.4.17, shadcn/ui, Radix UI, Lucide React (Icons)
+### Development
+VS Code, ESLint, PostCSS, Node.js types, TypeScript types
 
-### Medium Priority
-- Search/filter functionality
+
+## Roadmap
+
+- Add icons for different file types
+- Expand All, Collapse All buttons
+- Search/filter function
 - Select and copy specific file paths
-- Show last commit info for each file
+- Show last commit info for each file on hover
+- Display file sizes (complete ✔️)
 
 
-
-
-This is a Next.js project bootstrapped with `create-next-app` (https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
