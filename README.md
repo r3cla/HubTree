@@ -13,14 +13,13 @@ GitHub File Structure Visualizer (HubTree) is a simple web app that lets you exp
 - **AI Tool Integration**: Share exact file structures with AI agents and tools for more accurate project context
   
 ## Roadmap
-
-- Add icons for different file types
 - Expand All, Collapse All buttons
 - Search/filter function
 - Select and copy specific file paths
 - Show last commit info for each file on hover
 - Export to diagram
-- Display file sizes (complete ✔️)
+- Add icons for different file types *(half complete..🍃)*
+- Display file sizes **(complete ✔️)**
   
 ## Tech Stack
 
