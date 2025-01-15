@@ -162,9 +162,6 @@ const getFileIcon = (filename: string): { icon: IconComponent; color: string } =
     ...configExtensions,
   };
 
-  // Define the type of allExtensions ensuring string keys
-  type AllExtensions = StringIndexed<typeof allExtensions>;
-
   // Type guard to check if extension is a key of allExtensions
   function isValidExtension(extension: string): extension is string {
     return extension in allExtensions;
