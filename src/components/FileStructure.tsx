@@ -487,7 +487,7 @@ const FileStructure: React.FC = () => {
           className="flex items-center justify-center gap-2 hover:text-white transition-colors"
         >
           <ExternalLink size={13} />
-          View Source
+          This project is open-source, licensed under MIT
         </a>
       </div>
     </Card>
