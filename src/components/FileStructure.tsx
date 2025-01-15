@@ -58,10 +58,6 @@ interface FileNode {
 
 type IconComponent = typeof File;
 
-type StringIndexed<T> = {
-  [K in keyof T]: T[K];
-} & { [key: string]: { icon: IconComponent; color: string } };
-
 const getFileIcon = (filename: string): { icon: IconComponent; color: string } => {
   const extension = filename.split('.').pop()?.toLowerCase() || '';
 
