@@ -11,14 +11,7 @@ GitHub File Structure Visualizer (HubTree) is a simple web app that lets you exp
 - **Quick Project Evaluation**: Instantly assess open-source projects and libraries without cloning
 - **Technical Interviews**: Get rapid project architecture overviews for discussions
 - **AI Tool Integration**: Share exact file structures with AI agents and tools for more accurate project context
-## Tech Stack
-
-### Frontend
-React 19.0.0, Next.js 15.1.4, TypeScript 5.7.3, Tailwind CSS 3.4.17, shadcn/ui, Radix UI, Lucide React (Icons)
-### Development
-VS Code, ESLint, PostCSS, Node.js types, TypeScript types
-
-
+  
 ## Roadmap
 
 - Add icons for different file types
@@ -28,5 +21,12 @@ VS Code, ESLint, PostCSS, Node.js types, TypeScript types
 - Show last commit info for each file on hover
 - Export to Mindmap diagram
 - Display file sizes (complete ✔️)
+  
+## Tech Stack
+
+### Frontend
+React 19.0.0, Next.js 15.1.4, TypeScript 5.7.3, Tailwind CSS 3.4.17, shadcn/ui, Radix UI, Lucide React (Icons)
+### Development
+VS Code, ESLint, PostCSS, Node.js types, TypeScript types
 
 
