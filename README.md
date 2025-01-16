@@ -21,8 +21,9 @@ GitHub File Structure Visualizer (HubTree) is a simple web app that lets you exp
 - GitLab support
 - Export to diagram
 ### In Progress or Complete
+- Add icons for different file types *(in progress)*
+  - Shortlist: .npmrc, .vscodeignore, .vsconfig, .filter, .mp3, .config, .htm, .asset, .xsd, .dll, .txt, .log, .meta, .unity,  
 - Expand All, Collapse All buttons ✔️
-- Add icons for different file types ✔️
 - Show last commit info for each file on ~~hover~~ click ✔️
 - Display file sizes ✔️
   
