@@ -23,7 +23,7 @@ GitHub File Structure Visualizer (HubTree) is a simple web app that lets you exp
 - Export to diagram
 ### In Progress or Complete
 - Add icons for different file types *(mostly complete..🍃)*
-- Show last commit info for each file on hover ✔️
+- Show last commit info for each file on ~~hover~~ click ✔️
 - Display file sizes ✔️
   
 ## Tech Stack
