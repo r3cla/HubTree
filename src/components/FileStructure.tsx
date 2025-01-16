@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Github, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
@@ -18,12 +18,20 @@ const FileStructure: React.FC = () => {
   const [copiedTimeout, setCopiedTimeout] = useState<NodeJS.Timeout | null>(null);
   const [isCopied, setIsCopied] = useState(false);
   const [defaultBranch, setDefaultBranch] = useState<string>('main');
-
   const [repoInfo, setRepoInfo] = useState<RepoInfo | null>(null);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (copiedTimeout) {
+        clearTimeout(copiedTimeout);
+      }
+    };
+  }, [copiedTimeout]);
 
   const extractRepoInfo = (url: string): RepoInfo => {
     try {
-      const regex = /github\.com\/([^/]+)\/([^/]+)/;
+      const regex = new RegExp('github\\.com\\/([^\\/]+)\\/([^\\/]+)');
       const match = url.match(regex);
 
       if (!match) {
@@ -53,6 +61,30 @@ const FileStructure: React.FC = () => {
       }
       return next;
     });
+  };
+
+  const getAllFolderPaths = (nodes: FileNode[]): string[] => {
+    let paths: string[] = [];
+
+    nodes.forEach(node => {
+      if (node.type === 'directory') {
+        paths.push(node.path);
+        if (node.children) {
+          paths = paths.concat(getAllFolderPaths(node.children));
+        }
+      }
+    });
+
+    return paths;
+  };
+
+  const handleExpandAll = () => {
+    const allPaths = getAllFolderPaths(fileStructure);
+    setExpandedFolders(new Set(allPaths));
+  };
+
+  const handleCollapseAll = () => {
+    setExpandedFolders(new Set());
   };
 
   const handleCopyToClipboard = async () => {
@@ -128,7 +160,9 @@ const FileStructure: React.FC = () => {
       setExpandedFolders(new Set());
     } catch (error: unknown) {
       console.error('Error in fetchFileStructure:', error);
-      setError(error instanceof Error ? error.message : 'Failed to fetch repository structure');
+      setError(
+        error instanceof Error ? error.message : 'Failed to fetch repository structure'
+      );
     } finally {
       setLoading(false);
     }
@@ -168,6 +202,8 @@ const FileStructure: React.FC = () => {
               repoInfo={repoInfo}
               onToggleFolder={handleToggleFolder}
               onCopy={handleCopyToClipboard}
+              onExpandAll={handleExpandAll}
+              onCollapseAll={handleCollapseAll}
             />
           )}
         </div>

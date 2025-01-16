@@ -4,6 +4,9 @@ import {
   FileJson,
   FileType,
   FileText,
+  FileImage,
+  Star,
+  Hash, 
   FileSpreadsheet,
   Package,
   Database,
@@ -38,6 +41,8 @@ const codeExtensions: ExtensionMap = {
   rs: { icon: FileCode, color: 'text-orange-400' },
   swift: { icon: FileCode, color: 'text-orange-400' },
   kt: { icon: FileCode, color: 'text-purple-400' },
+  svg: { icon: FileImage, color: 'text-green-400' },
+  css: { icon: Hash, color: 'text-blue-200' },
 };
 
 const dataExtensions: ExtensionMap = {
@@ -50,6 +55,8 @@ const dataExtensions: ExtensionMap = {
   xlsx: { icon: FileSpreadsheet, color: 'text-green-400' },
   db: { icon: Database, color: 'text-blue-300' },
   sql: { icon: Database, color: 'text-blue-300' },
+  ico: { icon: Star, color: 'text-yellow-400' },
+
 };
 
 const specialFiles: ExtensionMap = {
