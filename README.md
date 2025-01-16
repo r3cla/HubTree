@@ -29,7 +29,7 @@ GitHub File Structure Visualizer (HubTree) is a simple web app that lets you exp
 ## Tech Stack
 
 ### Frontend
-React 19.0.0, Next.js 15.1.4, TypeScript 5.7.3, Tailwind CSS 3.4.17, shadcn/ui, Radix UI, Lucide React (Icons)
+React 19.0.0, Next.js 15.1.4, TypeScript 5.7.3, Tailwind CSS 3.4.17, shadcn/ui, Radix UI, Lucide React
 ### Development
 VS Code, ESLint, PostCSS, Node.js types, TypeScript types
 
