@@ -1,6 +1,5 @@
 import React from 'react';
 import { Download } from 'lucide-react';
-import { RepoInfo } from '@/types/github';
 
 interface GitHubInputProps {
   url: string;
