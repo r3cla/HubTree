@@ -59,7 +59,7 @@ export const FileTreeItem: React.FC<FileTreeItemProps> = ({
   };
 
   const { icon: FileIcon, color } = node.type === 'directory'
-    ? { icon: Folder, color: 'text-indigo-600' }
+    ? { icon: Folder, color: 'text-blue-400' }
     : getFileIcon(node.name);
 
   const tooltipContent = (
@@ -83,45 +83,53 @@ export const FileTreeItem: React.FC<FileTreeItemProps> = ({
     </div>
   );
 
+  const innerContent = (
+    <div
+      className="flex items-center gap-2 py-1 px-2 rounded hover:bg-gray-800 cursor-pointer"
+      style={{ paddingLeft: `${level * 1.5}rem` }}
+      onClick={() => {
+        if (node.type === 'directory') {
+          onToggle(node.path);
+        }
+      }}
+    >
+      {node.type === 'directory' ? (
+        <>
+          <span className="w-4 h-4">
+            {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+          </span>
+          <FileIcon size={16} className={color} />
+        </>
+      ) : (
+        <>
+          <span className="w-4 h-4" />
+          <FileIcon size={16} className={color} />
+        </>
+      )}
+      <span className={`${node.type === 'directory' ? 'text-blue-400 font-medium' : 'text-gray-200'} flex-1`}>
+        {node.name}
+      </span>
+      {node.type === 'file' && node.size !== undefined && (
+        <span className="text-gray-400 text-sm">
+          {formatFileSize(node.size)}
+        </span>
+      )}
+    </div>
+  );
+
   return (
     <div className="flex flex-col">
-      <Tooltip
-        content={tooltipContent}
-        onShow={node.type === 'file' ? fetchCommitInfo : undefined}
-      >
-        <div
-          className="flex items-center gap-2 py-1 px-2 rounded hover:bg-gray-800 cursor-pointer"
-          style={{ paddingLeft: `${level * 1.5}rem` }}
-          onClick={(e) => {
-            if (node.type === 'directory') {
-              onToggle(node.path)
-            }
-            // File clicks will be handled by the Tooltip component
-          }}
+      {node.type === 'directory' ? (
+        innerContent
+      ) : (
+        <Tooltip
+          content={tooltipContent}
+          onShow={fetchCommitInfo}
         >
-          {node.type === 'directory' ? (
-            <>
-              <span className="w-4 h-4">
-                {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-              </span>
-              <FileIcon size={16} className={color} />
-            </>
-          ) : (
-            <>
-              <span className="w-4 h-4" />
-              <FileIcon size={16} className={color} />
-            </>
-          )}
-          <span className={`${node.type === 'directory' ? 'text-indigo-500 font-small' : 'text-gray-200'} flex-1`}>
-            {node.name}
-          </span>
-          {node.type === 'file' && node.size !== undefined && (
-            <span className="text-gray-400 text-sm">
-              {formatFileSize(node.size)}
-            </span>
-          )}
-        </div>
-      </Tooltip>
+          {innerContent}
+        </Tooltip>
+      )}
+      
       {node.type === 'directory' && isExpanded && node.children && (
         <div className="flex flex-col">
           {node.children.map((child) => (
