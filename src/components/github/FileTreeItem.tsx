@@ -59,7 +59,7 @@ export const FileTreeItem: React.FC<FileTreeItemProps> = ({
   };
 
   const { icon: FileIcon, color } = node.type === 'directory'
-    ? { icon: Folder, color: 'text-blue-400' }
+    ? { icon: Folder, color: 'text-indigo-600' }
     : getFileIcon(node.name);
 
   const tooltipContent = (
@@ -112,7 +112,7 @@ export const FileTreeItem: React.FC<FileTreeItemProps> = ({
               <FileIcon size={16} className={color} />
             </>
           )}
-          <span className={`${node.type === 'directory' ? 'text-blue-400 font-medium' : 'text-gray-200'} flex-1`}>
+          <span className={`${node.type === 'directory' ? 'text-indigo-500 font-small' : 'text-gray-200'} flex-1`}>
             {node.name}
           </span>
           {node.type === 'file' && node.size !== undefined && (

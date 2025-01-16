@@ -28,9 +28,9 @@ type ExtensionMap = {
 };
 
 const codeExtensions: ExtensionMap = {
-  tsx: { icon: FileCode, color: 'text-blue-400' },
+  tsx: { icon: FileCode, color: 'text-blue-500' },
   ts: { icon: FileCode, color: 'text-blue-400' },
-  jsx: { icon: FileCode, color: 'text-yellow-400' },
+  jsx: { icon: FileCode, color: 'text-yellow-500' },
   js: { icon: FileCode, color: 'text-yellow-400' },
   mjs: { icon: FileCode, color: 'text-yellow-400' },
   py: { icon: FileCode, color: 'text-green-400' },
@@ -63,7 +63,7 @@ const dataExtensions: ExtensionMap = {
   jpeg: { icon: Image, color: 'text-purple-300' },
   png: { icon: Image, color: 'text-purple-300' },
   webp: { icon: Image, color: 'text-purple-300' },
-  pdf: { icon: FileText, color: 'text-red-300' },
+  pdf: { icon: FileText, color: 'text-red-500' },
   md: { icon: Info, color: 'text-blue-300' },
 
 };
