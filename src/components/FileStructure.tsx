@@ -173,7 +173,7 @@ const FileStructure: React.FC = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Github className="w-8 h-8" />
-          GitHub File Structure Visualizer
+          GitHub File Structure Visualizer (Public Repos)
         </CardTitle>
       </CardHeader>
       <CardContent>
