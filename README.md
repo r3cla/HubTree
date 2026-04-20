@@ -18,7 +18,7 @@ By default, HubTree uses the GitHub API unauthenticated, which allows 60 request
 - **Higher rate limit** - 5,000 requests per hour
 - **Private repositories** - Access to your private repos instead of just public ones
 
-Note: The token is stored <ins>in your browsers local storage</ins> and is only sent to `api.github.com`
+⚠ Note: The token is stored <ins>in your browsers local storage</ins> and is only sent to `api.github.com`
 
 For more information about managing and creating a Personal Access Token, read the [GitHub Documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
 ## Use Cases
