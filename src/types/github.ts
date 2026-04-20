@@ -3,6 +3,14 @@ export interface RepoInfo {
   repo: string;
 }
 
+export interface RepoStats {
+  stars: number;
+  forks: number;
+  language: string | null;
+  updatedAt: string;
+  description: string | null;
+}
+
 export interface TreeItem {
   path: string;
   type: string;

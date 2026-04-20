@@ -213,6 +213,44 @@ const specialFiles: ExtensionMap = {
   'LICENSE':            { icon: Copyright,   color: 'text-yellow-200' },
 };
 
+const NOISY_FOLDERS = new Set([
+  // Dependencies / build output
+  'node_modules', '.next', 'dist', 'build', '__pycache__',
+  'vendor', 'coverage', '.cache', 'out', '.venv', 'venv',
+  '.turbo', '.vercel', '.parcel-cache', 'target', '.gradle',
+  'tmp', '.tmp',
+  // Editor / IDE config folders
+  '.github', '.gitlab', '.vscode', '.idea', '.vs',
+  '.zed', '.claude', '.cursor', '.windsurf', '.fleet',
+]);
+
+export const filterNoisyFolders = (nodes: FileNode[]): FileNode[] =>
+  nodes.reduce<FileNode[]>((acc, node) => {
+    if (node.type === 'directory' && NOISY_FOLDERS.has(node.name)) return acc;
+    acc.push(
+      node.type === 'directory' && node.children
+        ? { ...node, children: filterNoisyFolders(node.children) }
+        : node
+    );
+    return acc;
+  }, []);
+
+export const filterTree = (nodes: FileNode[], query: string): FileNode[] => {
+  if (!query) return nodes;
+  const q = query.toLowerCase();
+  return nodes.reduce<FileNode[]>((acc, node) => {
+    if (node.type === 'file') {
+      if (node.name.toLowerCase().includes(q)) acc.push(node);
+    } else {
+      const filteredChildren = filterTree(node.children ?? [], q);
+      if (filteredChildren.length > 0 || node.name.toLowerCase().includes(q)) {
+        acc.push({ ...node, children: filteredChildren });
+      }
+    }
+    return acc;
+  }, []);
+};
+
 export const getFileIcon = (filename: string): FileIconConfig => {
   const extension = filename.split('.').pop()?.toLowerCase() || '';
 

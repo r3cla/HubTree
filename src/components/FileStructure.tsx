@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Github, ExternalLink } from 'lucide-react';
+import { Github, ExternalLink, Star, GitFork, Clock, Code2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { GitHubInput } from './github/GitHubInput';
 import { FileTreeView } from './github/FileTreeView';
-import { RepoInfo, FileNode, GitHubApiResponse } from '@/types/github';
+import { RepoInfo, RepoStats, FileNode, GitHubApiResponse } from '@/types/github';
 import { buildFileTree } from '@/utils/file-utils';
 
 const FileStructure: React.FC = () => {
@@ -18,7 +18,10 @@ const FileStructure: React.FC = () => {
   const [copiedTimeout, setCopiedTimeout] = useState<NodeJS.Timeout | null>(null);
   const [isCopied, setIsCopied] = useState(false);
   const [defaultBranch, setDefaultBranch] = useState<string>('main');
+  const [selectedBranch, setSelectedBranch] = useState<string>('main');
+  const [branches, setBranches] = useState<string[]>([]);
   const [repoInfo, setRepoInfo] = useState<RepoInfo | null>(null);
+  const [repoStats, setRepoStats] = useState<RepoStats | null>(null);
   const [token, setToken] = useState<string>('');
   const [showToken, setShowToken] = useState<boolean>(false);
 
@@ -35,12 +38,9 @@ const FileStructure: React.FC = () => {
     }
   };
 
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
-      if (copiedTimeout) {
-        clearTimeout(copiedTimeout);
-      }
+      if (copiedTimeout) clearTimeout(copiedTimeout);
     };
   }, [copiedTimeout]);
 
@@ -49,9 +49,7 @@ const FileStructure: React.FC = () => {
       const regex = new RegExp('github\\.com\\/([^\\/]+)\\/([^\\/]+)');
       const match = url.match(regex);
 
-      if (!match) {
-        throw new Error('Invalid GitHub URL format');
-      }
+      if (!match) throw new Error('Invalid GitHub URL format');
 
       const info = {
         owner: match[1],
@@ -80,31 +78,21 @@ const FileStructure: React.FC = () => {
 
   const getAllFolderPaths = (nodes: FileNode[]): string[] => {
     let paths: string[] = [];
-
     nodes.forEach(node => {
       if (node.type === 'directory') {
         paths.push(node.path);
-        if (node.children) {
-          paths = paths.concat(getAllFolderPaths(node.children));
-        }
+        if (node.children) paths = paths.concat(getAllFolderPaths(node.children));
       }
     });
-
     return paths;
   };
 
-  const handleExpandAll = () => {
-    const allPaths = getAllFolderPaths(fileStructure);
-    setExpandedFolders(new Set(allPaths));
-  };
-
-  const handleCollapseAll = () => {
-    setExpandedFolders(new Set());
-  };
+  const handleExpandAll = () => setExpandedFolders(new Set(getAllFolderPaths(fileStructure)));
+  const handleCollapseAll = () => setExpandedFolders(new Set());
 
   const handleCopyToClipboard = async () => {
-    const generatePlainText = (nodes: FileNode[], level: number = 0): string => {
-      return nodes.map(node => {
+    const generatePlainText = (nodes: FileNode[], level: number = 0): string =>
+      nodes.map(node => {
         const indent = '  '.repeat(level);
         const line = `${indent}${node.name}${node.type === 'directory' ? '/' : ''}`;
         if (node.type === 'directory' && node.children) {
@@ -112,29 +100,18 @@ const FileStructure: React.FC = () => {
         }
         return line;
       }).join('\n');
-    };
 
-    const plainText = generatePlainText(fileStructure);
-    await navigator.clipboard.writeText(plainText);
+    await navigator.clipboard.writeText(generatePlainText(fileStructure));
     setIsCopied(true);
-
-    if (copiedTimeout) {
-      clearTimeout(copiedTimeout);
-    }
-
-    const timeout = setTimeout(() => {
-      setIsCopied(false);
-    }, 2000);
-
-    setCopiedTimeout(timeout);
+    if (copiedTimeout) clearTimeout(copiedTimeout);
+    setCopiedTimeout(setTimeout(() => setIsCopied(false), 2000));
   };
 
   const handleDownload = () => {
     try {
       const { owner, repo } = extractRepoInfo(url);
-      const downloadUrl = `https://github.com/${owner}/${repo}/archive/refs/heads/${defaultBranch}.zip`;
-      window.open(downloadUrl, '_blank');
-    } catch (error) {
+      window.open(`https://github.com/${owner}/${repo}/archive/refs/heads/${defaultBranch}.zip`, '_blank');
+    } catch {
       setError('Failed to generate download URL');
     }
   };
@@ -143,6 +120,8 @@ const FileStructure: React.FC = () => {
     setLoading(true);
     setError('');
     setFileStructure([]);
+    setRepoStats(null);
+    setBranches([]);
 
     try {
       const { owner, repo } = extractRepoInfo(url);
@@ -162,15 +141,26 @@ const FileStructure: React.FC = () => {
 
       const repoData = await repoResponse.json();
       setDefaultBranch(repoData.default_branch);
+      setSelectedBranch(repoData.default_branch);
+      setRepoStats({
+        stars: repoData.stargazers_count,
+        forks: repoData.forks_count,
+        language: repoData.language,
+        updatedAt: new Date(repoData.pushed_at).toLocaleDateString(),
+        description: repoData.description,
+      });
 
-      const treeResponse = await fetch(
-        `https://api.github.com/repos/${owner}/${repo}/git/trees/${repoData.default_branch}?recursive=1`,
-        { headers }
-      );
+      const [treeResponse, branchesResponse] = await Promise.all([
+        fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/${repoData.default_branch}?recursive=1`, { headers }),
+        fetch(`https://api.github.com/repos/${owner}/${repo}/branches?per_page=100`, { headers }),
+      ]);
 
-      if (!treeResponse.ok) {
-        throw new Error(`Failed to fetch repository structure`);
+      if (branchesResponse.ok) {
+        const branchesData = await branchesResponse.json();
+        setBranches(branchesData.map((b: { name: string }) => b.name));
       }
+
+      if (!treeResponse.ok) throw new Error('Failed to fetch repository structure');
 
       const data: GitHubApiResponse = await treeResponse.json();
 
@@ -179,14 +169,40 @@ const FileStructure: React.FC = () => {
       }
 
       const filteredTree = data.tree.filter(item => !item.path.includes('.git/'));
-      const fileTree = buildFileTree(filteredTree);
-      setFileStructure(fileTree);
+      setFileStructure(buildFileTree(filteredTree));
       setExpandedFolders(new Set());
     } catch (error: unknown) {
       console.error('Error in fetchFileStructure:', error);
-      setError(
-        error instanceof Error ? error.message : 'Failed to fetch repository structure'
+      setError(error instanceof Error ? error.message : 'Failed to fetch repository structure');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchTreeForBranch = async (branch: string): Promise<void> => {
+    if (!repoInfo) return;
+    setLoading(true);
+    setError('');
+    setFileStructure([]);
+    setSelectedBranch(branch);
+
+    try {
+      const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+      const treeResponse = await fetch(
+        `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/git/trees/${branch}?recursive=1`,
+        { headers }
       );
+
+      if (!treeResponse.ok) throw new Error('Failed to fetch repository structure');
+
+      const data: GitHubApiResponse = await treeResponse.json();
+      if (data.truncated) setError('Warning: Repository is too large, showing partial structure');
+
+      const filteredTree = data.tree.filter(item => !item.path.includes('.git/'));
+      setFileStructure(buildFileTree(filteredTree));
+      setExpandedFolders(new Set());
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'Failed to fetch repository structure');
     } finally {
       setLoading(false);
     }
@@ -215,6 +231,32 @@ const FileStructure: React.FC = () => {
             onToggleShowToken={() => setShowToken(prev => !prev)}
           />
 
+          {repoStats && (
+            <div className="flex items-center gap-4 text-xs text-gray-400 flex-wrap px-1">
+              {repoStats.language && (
+                <span className="flex items-center gap-1">
+                  <Code2 size={12} />
+                  {repoStats.language}
+                </span>
+              )}
+              <span className="flex items-center gap-1">
+                <Star size={12} />
+                {repoStats.stars.toLocaleString()}
+              </span>
+              <span className="flex items-center gap-1">
+                <GitFork size={12} />
+                {repoStats.forks.toLocaleString()}
+              </span>
+              <span className="flex items-center gap-1">
+                <Clock size={12} />
+                {repoStats.updatedAt}
+              </span>
+              {repoStats.description && (
+                <span className="text-gray-500 truncate max-w-xs">{repoStats.description}</span>
+              )}
+            </div>
+          )}
+
           {error && (
             <Alert variant="destructive">
               <AlertTitle>Error</AlertTitle>
@@ -229,10 +271,13 @@ const FileStructure: React.FC = () => {
               isCopied={isCopied}
               repoInfo={repoInfo}
               token={token}
+              branches={branches}
+              selectedBranch={selectedBranch}
               onToggleFolder={handleToggleFolder}
               onCopy={handleCopyToClipboard}
               onExpandAll={handleExpandAll}
               onCollapseAll={handleCollapseAll}
+              onBranchChange={fetchTreeForBranch}
             />
           )}
         </div>

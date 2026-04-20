@@ -30,13 +30,19 @@ For more information about managing and creating a Personal Access Token, read t
 
 ## Roadmap
 
-**One Day (Maybe):** 
+**One Day (Maybe):**
+- Shareable URL - encode the repo in the query string for direct links
+- File extension breakdown summary (e.g. "42 .ts, 18 .tsx")
+- Copy specific file/folder path to clipboard
 - GitLab support
 - Export structure to diagram
-- Search/filter
-- Toggle hide file extensions
 
 **Complete:**
+- Search/filter tree by filename or extension ✔️
+- Hide noisy folders toggle (node_modules, .next, dist, build, etc.) ✔️
+- Branch switcher - pick any branch or tag, not just the default ✔️
+- Click file/folder to open it on GitHub ✔️
+- Repo stats in header (stars, forks, language, last updated) ✔️
 - Authenticated API support ✔️
 - Expand All, Collapse All buttons ✔️
 - Display file sizes ✔️

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight, Folder, Loader2 } from 'lucide-react';
+import { ChevronDown, ChevronRight, Folder, Loader2, ExternalLink } from 'lucide-react';
 import { FileNode } from '@/types/github';
 import { getFileIcon, formatFileSize } from '@/utils/file-utils';
 import { Tooltip } from '@/components/ui/tooltip';
@@ -15,8 +15,10 @@ interface FileTreeItemProps {
   node: FileNode;
   level: number;
   isExpanded: boolean;
+  forceExpand: boolean;
   repoInfo: { owner: string; repo: string; } | null;
   token: string;
+  branch: string;
   onToggle: (path: string) => void;
 }
 
@@ -24,8 +26,10 @@ export const FileTreeItem: React.FC<FileTreeItemProps> = ({
   node,
   level,
   isExpanded,
+  forceExpand,
   repoInfo,
   token,
+  branch,
   onToggle,
 }) => {
   const [commitInfo, setCommitInfo] = useState<CommitInfo | null>(null);
@@ -87,9 +91,13 @@ export const FileTreeItem: React.FC<FileTreeItemProps> = ({
     </div>
   );
 
+  const githubUrl = repoInfo
+    ? `https://github.com/${repoInfo.owner}/${repoInfo.repo}/${node.type === 'directory' ? 'tree' : 'blob'}/${branch}/${node.path}`
+    : null;
+
   const innerContent = (
     <div
-      className="flex items-center gap-2 py-1 px-2 rounded hover:bg-gray-800 cursor-pointer"
+      className="group flex items-center gap-2 py-1 px-2 rounded hover:bg-gray-800 cursor-pointer"
       style={{ paddingLeft: `${level * 1.5}rem` }}
       onClick={() => {
         if (node.type === 'directory') {
@@ -100,7 +108,7 @@ export const FileTreeItem: React.FC<FileTreeItemProps> = ({
       {node.type === 'directory' ? (
         <>
           <span className="w-4 h-4">
-            {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+            {(isExpanded || forceExpand) ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
           </span>
           <FileIcon size={16} className={color} />
         </>
@@ -118,6 +126,18 @@ export const FileTreeItem: React.FC<FileTreeItemProps> = ({
           {formatFileSize(node.size)}
         </span>
       )}
+      {githubUrl && (
+        <a
+          href={githubUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
+          title="Open on GitHub"
+          className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-gray-700 ml-1"
+        >
+          <ExternalLink size={12} className="text-gray-400 hover:text-gray-200" />
+        </a>
+      )}
     </div>
   );
 
@@ -133,8 +153,8 @@ export const FileTreeItem: React.FC<FileTreeItemProps> = ({
           {innerContent}
         </Tooltip>
       )}
-      
-      {node.type === 'directory' && isExpanded && node.children && (
+
+      {node.type === 'directory' && (isExpanded || forceExpand) && node.children && (
         <div className="flex flex-col">
           {node.children.map((child) => (
             <FileTreeItem
@@ -142,8 +162,10 @@ export const FileTreeItem: React.FC<FileTreeItemProps> = ({
               node={child}
               level={level + 1}
               isExpanded={isExpanded}
+              forceExpand={forceExpand}
               repoInfo={repoInfo}
               token={token}
+              branch={branch}
               onToggle={onToggle}
             />
           ))}
