@@ -151,7 +151,13 @@ const FileStructure: React.FC = () => {
       const repoResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers });
 
       if (!repoResponse.ok) {
-        throw new Error(`Repository not found or not accessible`);
+        if (repoResponse.status === 404) {
+          throw new Error('Repository not found. If this is a private repo, add a Personal Access Token using the key icon above.');
+        }
+        if (repoResponse.status === 401 || repoResponse.status === 403) {
+          throw new Error('Access denied. Add a Personal Access Token using the key icon above to view private repositories.');
+        }
+        throw new Error(`GitHub API error (${repoResponse.status})`);
       }
 
       const repoData = await repoResponse.json();
