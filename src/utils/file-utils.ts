@@ -222,6 +222,8 @@ const NOISY_FOLDERS = new Set([
   // Editor / IDE config folders
   '.github', '.gitlab', '.vscode', '.idea', '.vs',
   '.zed', '.claude', '.cursor', '.windsurf', '.fleet',
+  // Test asset folders
+  'test_files', 'test_folders',
 ]);
 
 export const filterNoisyFolders = (nodes: FileNode[]): FileNode[] =>
