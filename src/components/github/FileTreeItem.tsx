@@ -16,6 +16,7 @@ interface FileTreeItemProps {
   level: number;
   isExpanded: boolean;
   repoInfo: { owner: string; repo: string; } | null;
+  token: string;
   onToggle: (path: string) => void;
 }
 
@@ -24,6 +25,7 @@ export const FileTreeItem: React.FC<FileTreeItemProps> = ({
   level,
   isExpanded,
   repoInfo,
+  token,
   onToggle,
 }) => {
   const [commitInfo, setCommitInfo] = useState<CommitInfo | null>(null);
@@ -37,8 +39,10 @@ export const FileTreeItem: React.FC<FileTreeItemProps> = ({
     setError(null);
 
     try {
+      const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
       const response = await fetch(
-        `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/commits?path=${node.path}&per_page=1`
+        `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/commits?path=${node.path}&per_page=1`,
+        { headers }
       );
 
       if (!response.ok) throw new Error('Failed to fetch commit info');
@@ -139,6 +143,7 @@ export const FileTreeItem: React.FC<FileTreeItemProps> = ({
               level={level + 1}
               isExpanded={isExpanded}
               repoInfo={repoInfo}
+              token={token}
               onToggle={onToggle}
             />
           ))}

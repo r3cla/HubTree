@@ -8,6 +8,7 @@ interface FileTreeViewProps {
   expandedFolders: Set<string>;
   isCopied: boolean;
   repoInfo: RepoInfo | null;
+  token: string;
   onToggleFolder: (path: string) => void;
   onCopy: () => void;
   onExpandAll: () => void;
@@ -19,6 +20,7 @@ export const FileTreeView: React.FC<FileTreeViewProps> = ({
   expandedFolders,
   isCopied,
   repoInfo,
+  token,
   onToggleFolder,
   onCopy,
   onExpandAll,
@@ -72,6 +74,7 @@ export const FileTreeView: React.FC<FileTreeViewProps> = ({
             level={0}
             isExpanded={expandedFolders.has(node.path)}
             repoInfo={repoInfo}
+            token={token}
             onToggle={onToggleFolder}
           />
         ))}

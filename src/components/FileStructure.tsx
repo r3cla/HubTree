@@ -19,6 +19,21 @@ const FileStructure: React.FC = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [defaultBranch, setDefaultBranch] = useState<string>('main');
   const [repoInfo, setRepoInfo] = useState<RepoInfo | null>(null);
+  const [token, setToken] = useState<string>('');
+  const [showToken, setShowToken] = useState<boolean>(false);
+
+  useEffect(() => {
+    setToken(localStorage.getItem('github_pat') ?? '');
+  }, []);
+
+  const handleTokenChange = (newToken: string) => {
+    setToken(newToken);
+    if (newToken) {
+      localStorage.setItem('github_pat', newToken);
+    } else {
+      localStorage.removeItem('github_pat');
+    }
+  };
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -131,7 +146,9 @@ const FileStructure: React.FC = () => {
 
     try {
       const { owner, repo } = extractRepoInfo(url);
-      const repoResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+      const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+
+      const repoResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers });
 
       if (!repoResponse.ok) {
         throw new Error(`Repository not found or not accessible`);
@@ -141,7 +158,8 @@ const FileStructure: React.FC = () => {
       setDefaultBranch(repoData.default_branch);
 
       const treeResponse = await fetch(
-        `https://api.github.com/repos/${owner}/${repo}/git/trees/${repoData.default_branch}?recursive=1`
+        `https://api.github.com/repos/${owner}/${repo}/git/trees/${repoData.default_branch}?recursive=1`,
+        { headers }
       );
 
       if (!treeResponse.ok) {
@@ -182,9 +200,13 @@ const FileStructure: React.FC = () => {
             url={url}
             loading={loading}
             hasFileStructure={fileStructure.length > 0}
+            token={token}
+            showToken={showToken}
             onUrlChange={setUrl}
             onFetch={fetchFileStructure}
             onDownload={handleDownload}
+            onTokenChange={handleTokenChange}
+            onToggleShowToken={() => setShowToken(prev => !prev)}
           />
 
           {error && (
@@ -200,6 +222,7 @@ const FileStructure: React.FC = () => {
               expandedFolders={expandedFolders}
               isCopied={isCopied}
               repoInfo={repoInfo}
+              token={token}
               onToggleFolder={handleToggleFolder}
               onCopy={handleCopyToClipboard}
               onExpandAll={handleExpandAll}
