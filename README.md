@@ -1,7 +1,7 @@
 
 # HubTree - GitHub File Structure Visualizer
 
-HubTree is a simple web app that lets you explore repository file structures simply by entering the GitHub repo URL. This includes copying the file structure (indented) as plaintext.
+HubTree is a simple web app that lets you explore repository file structures simply by entering the GitHub repo URL.
 
 ## Features
 
@@ -23,9 +23,10 @@ By default, HubTree uses the GitHub API unauthenticated, which allows 60 request
 For more information about managing and creating a Personal Access Token, read the [GitHub Documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
 ## Use Cases
 
-- **Quick Project Evaluation** - Assess open-source projects and libraries without cloning
-- **Technical Discussion** - Get project architecture overviews for discussions
-- **AI Tool Integration** - Share exact file structures with AI agents for more accurate project context
+- Assess open-source projects and libraries without cloning
+- Get project architecture overviews for discussions
+- Share exact file structures with AI agents for more accurate project context
+- Integrating functionality into another project
 
 
 ## Roadmap
